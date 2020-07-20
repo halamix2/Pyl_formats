@@ -1,2 +1,3 @@
-__all__ = ['DAT']
+__all__ = ['DAT', 'SPR']
 from Odpylarka.DAT import DAT
+from Odpylarka.SPR import SPR
