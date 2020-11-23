@@ -41,13 +41,21 @@ class PIC():
                 blocks = struct.unpack("<L",pic_file.read(4))[0]
 
                 for block in range(blocks):
-                    width_data = struct.unpack("<L",pic_file.read(4))[0]
-                    starting_position = struct.unpack("<L",pic_file.read(4))[0]
-                    block_data = pic_file.read(width_data * 2)
+                    if pic_file.tell() < file_size:
+                        width_data = struct.unpack("<L",pic_file.read(4))[0]
+                        starting_position = struct.unpack("<L",pic_file.read(4))[0]
+                        block_data = pic_file.read(width_data * 2)
 
-                    lines_data[line] += b''.join([b'\x00\x00'] * (starting_position - int(len(lines_data[line]) /2)))
-                    lines_data[line] += block_data
-                line += 1           
+                        lines_data[line] += b''.join([b'\x00\x00'] * (starting_position - int(len(lines_data[line]) /2)))
+                        lines_data[line] += block_data
+                        if(pic_file.tell() % 4 != 0):
+                            # TODO I hope this will work with ther files as well
+                            ech = pic_file.read(4 - (pic_file.tell() % 4))
+                            print('skipping bytes')
+                    else:
+                        print('something\'s wrong, there should be a block here, but I only see end of the file')
+                        break
+                line += 1
 
         new_pic.__width = int(len(max(lines_data, key=len)) / 2)
         if new_pic.__width == 0:
@@ -56,6 +64,7 @@ class PIC():
         for line in lines_data:
             new_pic.__data += line
             new_pic.__data += b''.join([b'\x00\x00'] * (new_pic.__width - int(len(line) / 2)))
+
         
         if new_pic.check():
             return new_pic
@@ -118,7 +127,16 @@ class PIC():
             return False
            
         return True
-
+        
+    def get_width(self):
+        return self.__width
+        
+    def get_height(self):
+        return self.__height
+        
+    def get_data(self):
+        return self.__data
+        
     @staticmethod
     def __convert_color(data):
         pixels = []
