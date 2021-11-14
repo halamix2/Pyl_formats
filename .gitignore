@@ -1,6 +1,27 @@
 DATA/*
 LEVEL/*
 .DAT
+.PIC
+.SPR
+.MSK
+
+.png
+.PNG
+.GLU
+.ENT
+.GRF
+.LNG
+.GFX
+.LHT
+.LCP
+
+.CHS
+.CHM
+.CHT
+.CHE
+.LWO
+.WAV
+
 out/*
 
 **/__pycache__/*

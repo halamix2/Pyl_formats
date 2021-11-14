@@ -17,7 +17,7 @@ from PIL import Image # type: ignore
 import struct
 
 #TODO check if size is at least 1x1
-class PIC():
+class MSK():
     def __init__(self):
         self.__width = 0
         self.__height = 0
@@ -29,8 +29,8 @@ class PIC():
         lines_data = []
         with open(filename, 'rb') as pic_file:
             hoh = struct.unpack("<L",pic_file.read(4))[0]
-            if hoh !=0:
-                print('This is usually set to 0, beware, this might not be a PIC file')
+            if hoh != 1:
+                print('This is usually set to 1, beware, this might not be a MSK file')
             new_pic.__height = struct.unpack("<L",pic_file.read(4))[0]
 
             line = 0
@@ -44,14 +44,10 @@ class PIC():
                     if pic_file.tell() < file_size:
                         width_data = struct.unpack("<L",pic_file.read(4))[0]
                         starting_position = struct.unpack("<L",pic_file.read(4))[0]
-                        block_data = pic_file.read(width_data * 2)
+                        # block_data = pic_file.read(width_data * 2)
 
                         lines_data[line] += b''.join([b'\x00\x00'] * (starting_position - int(len(lines_data[line]) /2)))
-                        lines_data[line] += block_data
-                        if(pic_file.tell() % 4 != 0):
-                            # TODO I hope this will work with ther files as well
-                            ech = pic_file.read(4 - (pic_file.tell() % 4))
-                            print('skipping bytes')
+                        lines_data[line] += b''.join([b'\x00\x80'] * width_data)
                     else:
                         print('something\'s wrong, there should be a block here, but I only see end of the file')
                         break

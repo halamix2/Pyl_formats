@@ -1,0 +1,35 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: Pyl .MSK file
+//   Authors: Halamix2
+//   Version: 0.1
+//   Purpose: 
+//  Category: Game
+// File Mask: *.PIC
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+typedef struct {
+    int unknown;
+    int height;
+} Header;
+
+typedef struct {
+    int pixels_count; 
+    int pixel_offsets; // offsets in the resulting image
+} Block;
+
+
+typedef struct {
+    int blocks_count;
+    if (blocks_count > 0) {
+        Block blocks[blocks_count] <optimize=false>;
+    }
+} Line;
+
+Header header;
+Line lines[header.height] <optimize=false>;
