@@ -1,0 +1,44 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: Pył .CHS
+//   Authors: Halamix2
+//   Version: 
+//   Purpose: 
+//  Category: Game
+// File Mask: *.CHS
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+LittleEndian();
+
+typedef struct {
+    int mesh_count; // mesh count?
+    int unk; // I have no idea what this is
+    int important; // still unknown
+    int ffffff <comment="alwayx -1">;
+} Header;
+
+typedef struct {
+    int unk;
+    int unk;
+} Descriptor;
+
+typedef struct {
+char unk; // tied to the header.unk ???
+float a;
+float c;
+short unknown;
+float b[5];
+} Subobjects;
+
+typedef struct {
+    char name[9] <bgcolor=0x00ff00>;
+    Subobjects subobjects[header.unk];
+} Object;
+
+
+
+Header header;
+Descriptor descriptors[header.important];
+Object objects[header.mesh_count] <optimize=false>;
